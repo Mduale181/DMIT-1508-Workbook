@@ -1,5 +1,44 @@
 # Lab Template
 
+## Customer Details view
+
+### 0NF
+
+**Customer:**(<span class="md"><b class="pk">CustomerNumber</b>,FirstName, LastName,Address,City, Province, Postal Code, HomePhone</span>)
+
+### 1NF - 3NF
+
+*No changes to the entity/table in 1NF to 3NF.*
+
+### ERD
+
+> TODO: Place image here
+
+## Customer Order View
+
+### 0NF 
+
+**Order:** (<span class="md"><b class="pk">OrderNumber</b>, CustomerNumber, FirstNmae, LastName, Address, City, Province, PostalCode, Phone, Date, <b class="rg">ItemNumber, Description, Quantity, CurrentPrice, SellingPrice, Amount</b>, Subtotal, GST, Total </span>)
+
+## INF
+
+**Order** (<span class="md"><b class="pk">OrderNumber</b>, CustomerNumber, FirstNmae, LastName, Address, City, Province, PostalCode, Phone, Date, <b class="rg">ItemNumber, Description, Quantity, CurrentPrice, SellingPrice, Amount</b>, Subtotal, GST, Total </span>)
+
+**OrderDetail:** <span class="md"><b class="pk"><u class="fk"orderNumber></u>, ItemNumber</b>, Description, Quantity, CurrentPrice, SellingPrice, Amount</span>
+
+### 2NF
+
+**OrderDetail:** <span class="md"><b class="pk"><u class="fk">OrderNumber</u>,<u class="fk">ItemNumber</u></b>, Quantity, SellingPrice, Amount,</span>
+
+**Item:** <span class="md"><b class="pk">ItemNumber</b>, Description, CurrentPrice</span>
+
+### 3NF
+
+**Order** (<span class="md"><b class="pk">OrderNumber</b>, <u class="fk">CustomerNumber</u>, Date, Subtotal, GST, Total </span>)
+
+**Customer** <span class="md"><b class="pk">CustomerNumber</b>, FirstName,, LastName, Address, City, Province, PostalCode, Phone</span>
+
+----
 > Your lab is to be submitted as a **Markdown** (`*.md`) file using the following legend. The recommended text editor for these files is [**Visual Studio Code**](https://code.visualstudio.com), as this editor allows you to preview your markdown document as HTML. ERDs can be created using [**Lucidchart**](https://www.lucidchart.com/) and exported as `*.png` files. Check with your instructor about getting a free *Lucidchart* account to use during this course.
 
 ## Legend
@@ -17,22 +56,85 @@ This legend is a guide to reading and interpreting the table listings under 0NF 
 ----
 
 <style type="text/css">
+.md{
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+}
+.md::before{
+    content: '(';
+    font-size: 1.25em;
+    font-weight: bold;
+}
+.md::after{
+    content: '(';
+    font-size: 1.25em;
+    font-weight: bold;
+}
 .pk {
     font-weight: bold;
     display: inline-block;
     border: solid thin blue;
     padding: 0 1px;
+    position: relative;
+}
+.pk::before{
+    content: 'P';
+    font-size: .55em;
+    font-weight: bold;
+    color: white;
+    background-color: #72c4f7;
+    position: absolute;
+    left: -5px;
+    top: -15px;
+    border-radius: 50%;
+    border: solid thin blue;
+    width: 1.4em;
+    height: 3px;
+    padding: 3px;
+    text-align: center;
 }
 .fk {
     color: green;
     font-style: italic;
-    text-decoration: wavy underline green;    
+    text-decoration: wavy underline green; 
+    padding: 0 2px;
+    position: relative;   
+}
+.fk::before{
+    content: 'f';
+    font-size: .65em;
+    position: absolute;
+    left: -1px;
+    bottom: -17px;
+    color: darkgreen;
+    background-color: #a7dea7;
+    border-radius: 50%;
+    border: dashed thin green;
+    width: 1.4em;
+    height: 3px;
+    padding: 3px;
+    text-align: center;
 }
 .rg {
+    display: inline-block;
+    color: inherit;
+    font-size: 1em;
+    font-weight: normal;
+}
+.rg::before{
+    content: '\007B';
     color: darkorange;
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: bold;  
 }
+.rg::after{
+    content: '\007D';
+    color: darkorange;
+    font-size: 1.2em;
+    font-weight: bold;  
+}
+
 .note {
     font-weight: bold;
     color: brown;
