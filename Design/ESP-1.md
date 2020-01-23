@@ -13,7 +13,7 @@
 ### ERD
 
 > ![CustomersView](./ERD-CustomersView.png)
-
+> ![CustomersView](./CustomerOrderView.png)
 ## Customer Order View
 
 ### 0NF 
