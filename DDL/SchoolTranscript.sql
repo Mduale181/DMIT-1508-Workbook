@@ -19,6 +19,8 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Courses')
     DROP TABLE Courses
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Students')
     DROP TABLE Students
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Invoice')
+    DROP TABLE Invoice
 
 /*=== Create Tables == */
 
@@ -31,7 +33,7 @@ CREATE TABLE Students
     GivenName      varchar(50)			NOT NULL,
     Surname         varchar(50)
 		CONSTRAINT CK_Students_Surname
-			CHECK(Surname LIKE ' %')			-- LIKE allows us to do a "pattern-match" of values
+			CHECK(Surname LIKE '__%')			-- LIKE allows us to do a "pattern-match" of values
 --			CHECK (Surname LIKE '[a-z][a-z]%')	-- two letters plus any other chars
 		--						\ 1\ 1\
 		--Positive match for 'Fred'
@@ -128,3 +130,27 @@ ALTER TABLE Students
 		CHECK (PostalCode LIKE '[A-Z][0-9][A-Z][0-9][A-Z][0-9]')
 		-- match for T4R1H2	:	  T	  4	R	1	H		2
 GO
+
+--3) Add a default constraint for the Status column of studentCourses
+-- Set 'E' as the default value
+
+ALTER TABLE StudentCourses
+	ADD CONSTRAINT DF_StudentCourses_Status
+	DEFAULT ('E') FOR [Status] --- In an alter table statement, the column must be specified
+								-- for the default value 
+GO
+
+/* ---- Other Odds and Ends ----- */
+
+sp_help Students --- Get schema information for the students table
+
+--- In a table, we can have some columns be "calculated" or "derived" columns
+---- where the value of the column is a calculation from other columns
+
+CREATE TABLE Invoice
+(
+	InvoiceId			int		NOT NULL,
+	Subtotal			money	NOT NULL,
+	GST					Money	NOT NULL,
+	Total				AS Subtotal + GST  --- This is a Computed Column
+)
