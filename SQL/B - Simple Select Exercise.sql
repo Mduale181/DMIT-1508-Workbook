@@ -5,6 +5,9 @@
 Use [A01-School]
 GO
 
+--Q What is the average of the following numbers?
+-- 97 43 53 29 40 
+
 --1.	Select the average Mark from all the Marks in the registration table
 SELECT  AVG(Mark) AS 'Average Mark'
 FROM    Registration
@@ -24,6 +27,8 @@ WHERE   CourseId = 'DMIT104'
 --3.	Select how many students are there in the Student Table
 SELECT  COUNT(FirstName) AS 'Student Count'
 FROM    Student
+
+
 
 --3.b   The argument for the COUNT() function can be any column and/or expression.
 --      COUNT() will count the number of occurrences (i.e., "rows").
@@ -57,6 +62,7 @@ WHERE   CourseId = 'DMIT152'
 
 --5.	Select the average payment amount for payment type 5
 -- TODO: Student Answer Here - Hint: It's in the Payment table....
+
 
 
 -- Given that there are some other aggregate methods like MAX(columnName) and MIN(columnName), complete the following two questions:
