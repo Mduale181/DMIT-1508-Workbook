@@ -2,6 +2,16 @@
 USE [A01-School]
 GO
 
+
+--we express relationships between tables in our design through FOREIGN KEY
+-- CONSTRAINTS. but those constraints simply check/restrict information that 
+-- is stored in the foreign key column. it doesnot actually/physically "connect"
+-- the tables - all the tables are "independent" that means that when we try
+-- to pull information from multiple related tables we have to state the
+-- connection between those tables. that is , we have to state how the tables
+-- JOIN together.
+
+
 --1.	Select Student full names and the course ID's they are registered in.
 SELECT  FirstName + ' ' + LastName AS 'Full Name',
         CourseId
@@ -33,14 +43,14 @@ ORDER BY 'Staff Full Name', CourseId
 --3.	Select all the Club ID's and the Student full names that are in them
 -- TODO: Student Answer Here...
 SELECT  ClubId, FirstName + ' ' + LastName AS 'Student Full Name'
-FROM    Activity A
+FROM    Activity AS A
     INNER JOIN Student S ON A.StudentID = S.StudentID
 
 --4.	Select the Student full name, courseID's and marks for studentID 199899200.
 SELECT  S.FirstName + ' ' + S.LastName AS 'Student Name',
         R.CourseId,
         R.Mark
-FROM    Registration R
+FROM    Registration AS R
     INNER JOIN Student S
             ON S.StudentID = R.StudentID
 WHERE   S.StudentID = 199899200
@@ -84,7 +94,13 @@ WHERE   S.StudentID = 199912010
 
 --9. What are the Student Names, courseID's with individual Marks at 80% or higher? Sort the results by course.
 -- TODO: Student Answer Here...
-
+SELECT  FirstName + ' ' + LastName AS 'Student',
+        CourseName,
+        Mark 
+FROM    Student S
+    INNER JOIN Registration R ON R.StudentID = S.StudentID
+    INNER JOIN Course C ON C.CourseId = R.CourseId
+WHERE   Mark >= 80
 --10. Modify the script from the previous question to show the Course Name along with the ID.
 -- TODO: Student Answer Here...
 
