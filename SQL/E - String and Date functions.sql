@@ -16,7 +16,7 @@ GO
     ORDER BY 1 -- sorted by the first column
 
 	-- SUBSTRING
-	SELECT SUBSTRING('Hello World', 1, 2)
+	SELECT SUBSTRING('Hello World', 1, 2) -- 1 is index/position 2 number of characters
 	SELECT SUBSTRING('To be or not to be', 10, 3)
 	-- REVERSE
     SELECT REVERSE('Dan')
@@ -30,7 +30,8 @@ GO
 		-- LTRIM, RTRIM -- To remove whitespace from the left or the right
 		-- UPPER, LOWER -- Return upper and lower characters
 
--- Date Functions
+
+-- Date Functions -- it gives you the current time and date on the computer the database is running on
 	-- GETDATE()
 	SELECT GETDATE() AS 'Database Server- Current Date/Time'
 	-- DATENAME - See https://msdn.microsoft.com/en-CA/library/ms174395.aspx for DateParts
@@ -43,7 +44,7 @@ GO
     SELECT FirstName, MONTH(Birthdate) AS 'Birth Month' FROM Student
     WHERE  MONTH(Birthdate) = DATEPART(MONTH, GETDATE())
 	-- YEAR
-	-- DATEDIFF - Staff.DateHired - DateReleased
+	-- DATEDIFF - DateReleased - Staff.DateHired  
 	SELECT FirstName + ' ' + LastName AS 'Staff Name',
 	       DATEDIFF(DAY, DateHired, DateReleased) AS 'Days Employed'
            -->> DateReleased - DateHired, expressed as number of Days
@@ -91,16 +92,19 @@ WHERE   Mark IS NOT NULL
   AND   LEFT(Semester, 4) = 2004
 
 -- 6. select last three characters of all the courses
-
+SELECT RIGHT('courses', 3) AS 'First three characters'
 
 -- 7. Select the characters in the position description from characters 8 to 13 for PositionID 5
-
+SELECT SUBSTRING('Hello World', 5, 8)
 
 -- 8. Select all the Student First Names as upper case.
 
-
+SELECT  *
+UPPER('FirstName') AS UpperCaseStudentFirstName
+FROM    Student
 -- 9. Select the First Names of students whose first names are 3 characters long.
-
+SELECT FirstName
+FROM	Student
 
 /* ************************************************
     String Functions

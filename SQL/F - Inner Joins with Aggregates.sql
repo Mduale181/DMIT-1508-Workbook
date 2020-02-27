@@ -3,11 +3,22 @@ USE [A01-School]
 GO
 
 --1. How many staff are there in each position? Select the number and Position Description
+-- Exploring
+SELECT PositionDescription
+		StaffID
+FROM	Staff AS S
+	INNER JOIN Position AS P ON P.PositionID= S.PositionID
+ORDER BY PositionDescription
+
+
+
 SELECT  PositionDescription,                    --  <-- non-aggregate
         COUNT(S.StaffID) AS 'Number of Staff'   --  <-- aggregate
 FROM    Staff AS S
     INNER JOIN Position AS P ON P.PositionID = S.PositionID
 GROUP BY PositionDescription 
+
+
  
 -- Out of curiosity, what are all the position names?
 SELECT  PositionDescription FROM Position -- There are 7 positions...
@@ -17,15 +28,21 @@ SELECT  PositionDescription FROM Position -- There are 7 positions...
 -- Which position does not have staff? For that answer, you'll have to wait for the OUTER JOIN.
 
 --2. Select the average mark for each course. Display the CourseName and the average mark. Sort the results by average in descending order.
-SELECT  CourseName, AVG(Mark) AS 'Average Mark'
+SELECT  CourseName, AVG(Mark) AS 'Average Mark'-- label
 FROM    Registration AS R
     INNER JOIN Course AS C ON R.CourseId = C.CourseId
 GROUP BY CourseName
 ORDER BY 'Average Mark' DESC
 
+-- ORDER BY GO with average mark
+
 --3. How many payments where made for each payment type. Display the PaymentTypeDescription and the count.
  -- TODO: Student Answer Here... 
-
+ SELECT  PaymentType, COUNT(PaymentTypeID) AS 'PaymentTypeDescription'-- label
+FROM    PaymentType AS R
+    INNER JOIN Course AS C ON R.CourseId = C.CourseId
+GROUP BY CourseName
+ORDER BY 'PaymentTypeDescription' DESC
  
 --4. Select the average Mark for each student. Display the Student Name and their average mark. Use table aliases in your FROM & JOIN clause.
 SELECT  S.FirstName  + ' ' + S.LastName AS 'Student Name',
@@ -36,6 +53,7 @@ FROM    Registration AS R
 GROUP BY    S.FirstName  + ' ' + S.LastName  -- Since my non-aggregate is an expression,
                                              -- I am using the same expression in my GROUP BY
 
+											 -- GROUP BY go with the actual SELECT expression S.FirstName + S.LastName
 --5. Select the same data as question 4 but only show the student names and averages that are 80% or higher. (HINT: Remember the HAVING clause?)
  -- TODO: Student Answer Here... 
 
