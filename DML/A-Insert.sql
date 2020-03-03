@@ -15,6 +15,12 @@ GO -- Execute the code up to this point as a single batch
     INSERT INTO TableName(Comma, Separated, ListOf, ColumnNames)
     VALUES ('A', 'Value', 'Per', 'Column'),
            ('Another', 'Row', 'Of', 'Values')
+
+	When inserting values, you can use subqueries for individual values
+	provided that the subquery returns a single value:
+
+	INSERT INTO TableName(Comma, Separated, ListOf, ColumnNames)
+	VALUES('A',(SELECT SingleValue FROM SomeTable, 'Per', 'Column')
     
     Another syntax for the INSERT statement is to use a SELECT clause in place
     of the VALUES clause. This is used for zero-to-many possible rows to insert.
@@ -45,9 +51,15 @@ VALUES ('Shane', 'Bell', GETDATE(),
 -- 2.c. We have an open position in the staff.
 SELECT  PositionDescription
 FROM    Position
-WHERE   PositionID NOT IN (SELECT PositionID FROM Staff)
+WHERE   PositionID  NOT IN (SELECT PositionID FROM Staff)
 --      Add Sheldon Murray as the new Assistant Dean.
 -- TODO: Student Answer Here....
+INSERT INTO Staff(FirstName, LastName, DateHired, PositionID)
+VALUES ('Sheldon', 'Murray', GETDATE(), 
+        (SELECT PositionID
+        FROM   Position
+        WHERE  PositionDescription = 'Assistant Dean'))
+
 
 -- 3. There are three additional clubs being started at the school:
 --      - START - Small Tech And Research Teams
@@ -62,9 +74,18 @@ VALUES ('START', 'Small Tech And Research Teams'),
 -- ======= Practice ========
 -- 4. In your web browser, use https://randomuser.me/ to get information on three
 --    people to add as new students. Write separate insert statement for each new student.
+--sp_help Student script gives the character numbers in each row
 -- TODO: Student Answer Here....
+INSERT INTO Student(FirstName, LastName, Gender, StreetAddress, Birthdate)
+VALUES ('Alicia', 'Moore', 'F', '6786 Cackson St', '2/4/1961' )
+		
+INSERT INTO Student(FirstName, LastName, Gender, StreetAddress, Birthdate)
+VALUES ('Lillian', 'Fox', 'F', '6252 Rolling Green Rd', '9/4/1981' )
 
+INSERT INTO Student(FirstName, LastName, Gender, StreetAddress, Birthdate)
+VALUES ('Jordan', 'Craig', 'M', '1976 Spring Hill Rd', '9/5/1971' )
 
 -- 5. Enroll each of the students you've added into the DMIT777 course.
 --    Use 'Dan Gilleland' as the instructor. At this point, their marks should be NULL.
 -- TODO: Student Answer Here....
+
