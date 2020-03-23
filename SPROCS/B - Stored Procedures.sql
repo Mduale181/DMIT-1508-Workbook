@@ -164,10 +164,25 @@ AS
 RETURN
 GO
 
-
+EXEC CorrectStudentName 
 
 -- 5. Create a stored procedure that will remove a student from a club. Call it RemoveFromClub.
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'RemoveFromClub')
+    DROP PROCEDURE RemoveFromClub
+GO
+CREATE PROCEDURE RemoveFromClub
+    @FirstName      varchar(25),
+	@LastName		varchar(35),
+    @ClubName		varchar(50)
+	
+AS
+	BEGIN
+        DELETE  FROM Student WHERE FirstName = @FirstName 
+	END
+RETURN
+GO
 
+EXEC RemoveFromClub 'Dave', 'Brown', 'Computer System Society'
 
 -- Query-based Stored Procedures
 -- 6. Create a stored procedure that will display all the staff and their position in the school.
@@ -180,3 +195,7 @@ GO
 --    Display the course name and the student's full name and mark.
 
 -- 9. The school is running out of money! Find out who still owes money for the courses they are enrolled in.
+SELECT FirstName + LastName, ClubName
+FROM  Student S
+INNER JOIN Activity AS A ON S.StudentID = A.StudentID
+INNER JOIN Club AS C ON A.ClubID = C.ClubId
