@@ -171,29 +171,71 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROC
     DROP PROCEDURE RemoveFromClub
 GO
 CREATE PROCEDURE RemoveFromClub
-    @FirstName      varchar(25),
-	@LastName		varchar(35),
-    @ClubName		varchar(50)
-	
+    @StudentID		int
+
 AS
-	BEGIN
-        DELETE  FROM Student WHERE FirstName = @FirstName 
-	END
+	IF @StudentId IS NULL 
+        RAISERROR('All parameters are required.', 16, 1)
+	ELSE
+        DELETE  FROM Student WHERE StudentID = @StudentID 
 RETURN
 GO
 
-EXEC RemoveFromClub 'Dave', 'Brown', 'Computer System Society'
+SELECT *
+FROM Activity
 
+EXEC RemoveFromClub 199912010
 -- Query-based Stored Procedures
 -- 6. Create a stored procedure that will display all the staff and their position in the school.
 --    Show the full name of the staff member and the description of their position.
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'ListStaff')
+    DROP PROCEDURE ListStaff
+GO
+CREATE PROCEDURE ListStaff
 
+AS
+	SELECT FirstName + '  ' + LastName AS 'StaffMember', S.PositionID, P.PositionDescription
+	FROM Staff S
+	INNER JOIN Position AS P ON S.PositionID = P.PositionID
+
+RETURN
+GO
+
+EXEC ListStaff
 -- 7. Display all the final course marks for a given student. Include the name and number of the course
 --    along with the student's mark.
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'StudentsMark')
+    DROP PROCEDURE StudentsMark
+GO
+CREATE PROCEDURE StudentsMark
+	@StudentID		int
+AS
+	IF @StudentId IS NULL 
+        RAISERROR('All parameters are required.', 16, 1)
+	ELSE
+		SELECT CourseName, R.CourseId, Mark
+		FROM Course C
+		INNER JOIN Registration AS R ON C.CourseID = R.CourseID
+		WHERE StudentID = @StudentID
+RETURN
+GO
 
+EXEC StudentsMark 199899200
 -- 8. Display the students that are enrolled in a given course on a given semester.
 --    Display the course name and the student's full name and mark.
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'StudentEnrolledSemester')
+    DROP PROCEDURE StudentEnrolledSemester
+GO
+CREATE PROCEDURE StudentEnrolledSemester
+AS
+		SELECT CourseName,FirstName + '  ' + LastName AS 'FullName', Mark
+		FROM Student S
+		INNER JOIN Registration AS R ON S.StudentID = R.StudentID
+		INNER JOIN Course AS C ON R.CourseId = C.CourseId
+RETURN
+GO
 
+EXEC StudentEnrolledSemester
 -- 9. The school is running out of money! Find out who still owes money for the courses they are enrolled in.
 SELECT FirstName + LastName, ClubName
 FROM  Student S
