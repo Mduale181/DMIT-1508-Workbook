@@ -1,6 +1,17 @@
 --  Stored Procedures (Sprocs)
 -- Demonstrate using Transactions in a Stored Procedure
 
+-- what is transaction?
+--a transaction is typically needed when we do two or more of an inser/update/delete
+-- a transaction must succeed or fail as a group
+-- how do we start transaction
+-- BEGIN TRANSACTION
+		-- the BEGIN TRANSACTION only needs to be stated once
+-- TO make a transaction succeed, we use the statement COMMIT TRANSACTION
+--			The COMMIT TRANSACTION should only be used once
+-- TO make a transation fail, we use the statement ROLLBACK TRANSACTION
+	-- we will have one ROLLBACK TRANSACTION For every Insert/
+
 USE [A01-School]
 GO
 
@@ -18,6 +29,9 @@ GO
 
 
 -- 1. Add a stored procedure called TransferCourse that accepts a student ID, semester, and two course IDs: the one to move the student out of and the one to move the student in to.
+--	- withdraw the student from one course UPDATE
+--  - Add the student to the other
+
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'TransferCourse')
     DROP PROCEDURE TransferCourse
 GO
@@ -45,7 +59,7 @@ AS
         WHERE  StudentID = @StudentID
           AND  CourseId = @LeaveCourseID
           AND  Semester = @Semester
-          AND  (WithdrawYN = 'N' OR WithdrawYN IS NULL)
+          AND  (WithdrawYN = 'N' OR WithdrawYN IS NULL) -- this could resul in 0 rows affected
         --         Check for error/rowcount
         IF @@ERROR > 0 OR @@ROWCOUNT = 0
         BEGIN
@@ -53,6 +67,7 @@ AS
             RAISERROR('Unable to withdraw student', 16, 1)
             ROLLBACK TRANSACTION -- reverses the "temporary" changes to the database
         END
+			-- We may be asked to do other validation
         ELSE
         BEGIN
             -- Step 2) Enroll the student in the second course
@@ -66,7 +81,7 @@ AS
             BEGIN
                 --PRINT('RAISERROR + ROLLBACK')
                 RAISERROR('Unable to transfer student to new course', 16, 1)
-                ROLLBACK TRANSACTION
+                ROLLBACK TRANSACTION -- will undo the UPDATE action from step 1
             END
             ELSE
             BEGIN
